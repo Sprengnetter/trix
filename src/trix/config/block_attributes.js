@@ -12,6 +12,7 @@ const attributes = {
     terminal: true,
     breakOnReturn: true,
     group: false,
+    allowedTextAttributes: [ "heading1Id" ]
   },
   code: {
     tagName: "pre",

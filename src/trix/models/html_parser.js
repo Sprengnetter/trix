@@ -296,6 +296,11 @@ export default class HTMLParser extends BasicObject {
         })
       ) {
         attributes[attribute] = true
+      } else if (configAttr.groupTagName && configAttr.parser) {
+        value = configAttr.parser(element)
+        if (value) {
+          attributes[attribute] = value
+        }
       } else if (configAttr.parser) {
         value = configAttr.parser(element)
         if (value) {

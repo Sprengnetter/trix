@@ -743,6 +743,11 @@ export const fixtures = {
     html: `<h1>${blockComment}<strong>a</strong></h1><h1>${blockComment}<strong><em>b</em></strong></h1>`,
   },
 
+  "heading block with id": {
+    document: createDocument([ "Heading", { id: "my-id" }, [ "heading1" ] ]),
+    html: `<h1 id="my-id">${blockComment}Headline</h1>`,
+  },
+
   "bidrectional text": {
     document: createDocument(
       [ "a" ],

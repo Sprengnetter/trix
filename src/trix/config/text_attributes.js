@@ -34,4 +34,34 @@ export default {
   frozen: {
     style: { backgroundColor: "highlight" },
   },
+  heading1Id: {
+    groupTagName: "h1",
+    attributeName: "id",
+    parser(element) {
+      const header = element.closest("h1")
+      if (header) {
+        return header.getAttribute("id")
+      }
+    },
+  },
+  heading2Id: {
+    groupTagName: "h2",
+    attributeName: "id",
+    parser(element) {
+      const header = element.closest("h2")
+      if (header) {
+        return header.getAttribute("id")
+      }
+    },
+  },
+  heading3Id: {
+    groupTagName: "h3",
+    attributeName: "id",
+    parser(element) {
+      const header = element.closest("h3")
+      if (header) {
+        return header.getAttribute("id")
+      }
+    },
+  },
 }

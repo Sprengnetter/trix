@@ -348,6 +348,13 @@ testGroup("HTMLParser", () => {
       assert.documentHTMLEqual(document, expectedHTML)
     })
   })
+
+  test("parses h1 with id", () => {
+    const { html } = fixtures["heading block with id"]
+    const expectedHTML = "<h1 id=\"my-id\"><!--block-->Headline</h1>"
+    const document = HTMLParser.parse(html).getDocument()
+    assert.documentHTMLEqual(document, expectedHTML)
+  })
 })
 
 const withParserConfig = (attrConfig = {}, fn) => {

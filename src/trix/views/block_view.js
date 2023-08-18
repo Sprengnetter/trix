@@ -3,6 +3,7 @@ import ObjectView from "trix/views/object_view"
 import TextView from "trix/views/text_view"
 
 import { getBlockConfig, makeElement } from "trix/core/helpers"
+import { getTextConfig } from "../core/helpers"
 const { css } = config
 
 export default class BlockView extends ObjectView {
@@ -34,7 +35,6 @@ export default class BlockView extends ObjectView {
       if (this.block.isRTL()) {
         attributes = { dir: "rtl" }
       }
-
       const element = makeElement({ tagName, attributes })
       nodes.forEach((node) => element.appendChild(node))
       return [ element ]
@@ -42,17 +42,29 @@ export default class BlockView extends ObjectView {
   }
 
   createContainerElement(depth) {
-    let attributes, className
+    let className
+    const attributes = {}
     const attributeName = this.attributes[depth]
 
-    const { tagName } = getBlockConfig(attributeName)
+    const config = getBlockConfig(attributeName)
+    const { tagName } = config
     if (depth === 0 && this.block.isRTL()) {
-      attributes = { dir: "rtl" }
+      attributes.dir = "rtl"
     }
 
     if (attributeName === "attachmentGallery") {
       const size = this.block.getBlockBreakPosition()
       className = `${css.attachmentGallery} ${css.attachmentGallery}--${size}`
+    }
+    if (config.allowedTextAttributes?.length) {
+      for (const textAttr of config.allowedTextAttributes) {
+        const textAttrConfig = getTextConfig(textAttr)
+        const piece = this.getPieces()[0] // FIXME: brittle!?!?
+        if (textAttrConfig.attributeName && piece && piece.hasAttribute(textAttr)) {
+          const textAttrValue = piece.getAttribute(textAttr)
+          attributes[textAttrConfig.attributeName] = textAttrValue
+        }
+      }
     }
 
     return makeElement({ tagName, className, attributes })
@@ -62,5 +74,9 @@ export default class BlockView extends ObjectView {
   // so add an extra one.
   shouldAddExtraNewlineElement() {
     return /\n\n$/.test(this.block.toString())
+  }
+
+  getPieces() {
+    return Array.from(this.block.text.getPieces()).filter((piece) => !piece.hasAttribute("blockBreak"))
   }
 }
