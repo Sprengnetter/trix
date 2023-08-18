@@ -56,11 +56,16 @@ export default class BlockView extends ObjectView {
       const size = this.block.getBlockBreakPosition()
       className = `${css.attachmentGallery} ${css.attachmentGallery}--${size}`
     }
+
+    if (config.generateId) {
+      attributes.id = config.generateId(this.block)
+    }
+
     if (config.allowedTextAttributes?.length) {
       for (const textAttr of config.allowedTextAttributes) {
         const textAttrConfig = getTextConfig(textAttr)
         const piece = this.getPieces()[0] // FIXME: brittle!?!?
-        if (textAttrConfig.attributeName && piece && piece.hasAttribute(textAttr)) {
+        if (textAttrConfig.attributeName && piece?.hasAttribute(textAttr)) {
           const textAttrValue = piece.getAttribute(textAttr)
           attributes[textAttrConfig.attributeName] = textAttrValue
         }
